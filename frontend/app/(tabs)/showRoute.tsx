@@ -1,6 +1,9 @@
-import { ExpoLeaflet, MapMarker, MapShape} from 'expo-leaflet'
+import { ExpoLeaflet, MapMarker, MapShape } from 'expo-leaflet'
 import React, { useEffect, useState } from 'react'
-type LatLngLiteral = {lat: number, lng: number}
+import axios from 'axios';
+const baseUrl = '10.250.160.126';
+const fetchingPort = '8000';
+type LatLngLiteral = { lat: number, lng: number }
 import {
   ActivityIndicator,
   Alert,
@@ -82,12 +85,18 @@ const styles = StyleSheet.create({
 })
 
 export default function App() {
+  axios({
+    method: 'get',
+    url: `${baseUrl}:${fetchingPort}`,
+  }).then((response) => {
+    console.log(response.data)    ;
+  });
   const [zoom, setZoom] = useState(7)
   const [mapCenterPosition, setMapCenterPosition] = useState(initialPosition)
   const points: LatLngLiteral[] = [
-    {lat: 52.2297, lng: 21.0117},
-    {lat: 53.2297, lng: 22.0117},
-    {lat: 50.57304, lng: 21.67937 }
+    { lat: 52.2297, lng: 21.0117 },
+    { lat: 53.2297, lng: 22.0117 },
+    { lat: 50.57304, lng: 21.67937 }
   ]
 
   let mapMarkers: MapMarker[] = []
@@ -113,8 +122,7 @@ export default function App() {
   }
   mapMarkers.push(end)
 
-  for (let i = 0; i < points.length; i++)
-  {
+  for (let i = 0; i < points.length; i++) {
     routeLine.positions.push(points[i])
   }
 
@@ -124,54 +132,64 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-    <View style={styles.header}>
-      <Text style={styles.headerText}>showing route</Text>
-    </View>
-    <View style={{ flex: 1, position: 'relative' }}>
-      <ExpoLeaflet
-        loadingIndicator={() => <ActivityIndicator />}
-        mapShapes={mapShapes}
-        mapCenterPosition={mapCenterPosition}
-        mapLayers={mapLayers}
-        mapMarkers={mapMarkers}
-        mapOptions={mapOptions}
-        maxZoom={20}
-        onMessage={(message) => {
-          switch (message.tag) {
-            case 'onMapMarkerClicked':
-              Alert.alert(
-                `Map Marker Touched, ID: ${message.mapMarkerId || 'unknown'}`,
-              )
-              break
-            case 'onMapClicked':
-              Alert.alert(
-                `Map Touched at:`,
-                `${message.location.lat}, ${message.location.lng}`,
-              )
-              break
-            case 'onMoveEnd':
-              setMapCenterPosition(message.mapCenter)
-              break
-            case 'onZoomEnd':
-              setZoom(message.zoom)
-              break
-            default:
-              if (['onMove'].includes(message.tag)) {
-                return
-              }
-              console.log(message)
-          }
+      <View style={styles.header}>
+        <Text style={styles.headerText}>showing route</Text>
+      </View>
+      <View style={{ flex: 1, position: 'relative' }}>
+        <ExpoLeaflet
+          loadingIndicator={() => <ActivityIndicator />}
+          mapShapes={mapShapes}
+          mapCenterPosition={mapCenterPosition}
+          mapLayers={mapLayers}
+          mapMarkers={mapMarkers}
+          mapOptions={mapOptions}
+          maxZoom={20}
+          onMessage={(message) => {
+            switch (message.tag) {
+              case 'onMapMarkerClicked':
+                Alert.alert(
+                  `Map Marker Touched, ID: ${message.mapMarkerId || 'unknown'}`,
+                )
+                break
+              case 'onMapClicked':
+                Alert.alert(
+                  `Map Touched at:`,
+                  `${message.location.lat}, ${message.location.lng}`,
+                )
+                break
+              case 'onMoveEnd':
+                setMapCenterPosition(message.mapCenter)
+                break
+              case 'onZoomEnd':
+                setZoom(message.zoom)
+                break
+              default:
+                if (['onMove'].includes(message.tag)) {
+                  return
+                }
+                console.log(message)
+            }
+          }}
+          zoom={zoom}
+        />
+      </View>
+      <View style={{flexDirection:"row"}}>
+      <Button
+        onPress={() => {
+          setMapCenterPosition(initialPosition)
+          setZoom(7)
         }}
-        zoom={zoom}
+        title="Reset Map"
       />
-    </View>
-    <Button
-      onPress={() => {
-        setMapCenterPosition(initialPosition)
-        setZoom(7)
-      }}
-      title="Reset Map"
-    />
-  </SafeAreaView>
+      <Button
+        onPress={() => {
+          axios.get(`${baseUrl}:${fetchingPort}`).then((response) => {
+            console.log(response.data);
+          })
+        }}
+        title="Get Route"
+      />
+      </View>
+    </SafeAreaView>
   )
 }
