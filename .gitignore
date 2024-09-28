@@ -130,3 +130,4 @@ docs/pages/versions/*/react-native/*.diff
 **/ios/.xcode.env.local
 
 **/__pycache__/
+**/.venv
