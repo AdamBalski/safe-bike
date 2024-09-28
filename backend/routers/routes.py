@@ -28,3 +28,8 @@ async def get_routes():
 @router.post("/routes")
 async def post_route(route: str):
     return {"route": route}
+
+
+@router.post("/routes/{route_id}/score")
+async def get_route_score(route_id: int, score: int):
+    return {"route_id": route_id, "score": score}
