@@ -15,4 +15,4 @@ chmod +x ./safe-bike/bin/activate
 pip3 install -r /app/requirements.txt
 EOF
 
-CMD fastapi run
+CMD python3 /app/SafeBikeAPI/manage.py runserver
