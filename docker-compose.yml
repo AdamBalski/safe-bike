@@ -17,7 +17,7 @@ services:
       - POSTGRES_PASSWORD=password
       - APP_DEVELOPMENT_PROFILE=TRUE
   db:
-    image: 'postgres:12.9'
+    image: 'postgres:13.1'
     container_name: db
     restart: always
     volumes:

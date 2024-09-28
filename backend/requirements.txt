@@ -11,6 +11,7 @@ Django==5.1.1
 djangorestframework==3.15.2
 dnspython==2.6.1
 email_validator==2.2.0
+fastapi-cli==0.0.5
 fiona==1.10.1
 geopandas==0.14.4
 greenlet==3.1.1
@@ -28,6 +29,7 @@ numpy==1.26.4
 osmnx==1.9.4
 packaging==24.1
 pandas==2.2.3
+psycopg2-binary==2.9.9
 pydantic==2.9.2
 pydantic_core==2.23.4
 Pygments==2.18.0
