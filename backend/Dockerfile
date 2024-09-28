@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.12
 
 LABEL version="0"
 MAINTAINER "Prolog"
@@ -12,9 +12,7 @@ RUN <<EOF
 python3 -m venv safe-bike
 chmod +x ./safe-bike/bin/activate
 ./safe-bike/bin/activate
-pip3 install osmnx fastapi sqlalchemy
-pip3 install "fastapi[standard]"
-
+pip3 install -r /app/requirements.txt
 EOF
 
 CMD fastapi run
