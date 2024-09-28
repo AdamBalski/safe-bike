@@ -30,6 +30,11 @@ async def post_route(route: str):
     return {"route": route}
 
 
-@router.post("/routes/{route_id}/score")
+@router.post("/routes/{route_id}/score/")
 async def get_route_score(route_id: int, score: int):
     return {"route_id": route_id, "score": score}
+
+
+@router.get("/route-between-points/")
+async def get_route_between_points(point1: str, point2: str):
+    return {"route": f"route between points {point1} and {point2}"}
